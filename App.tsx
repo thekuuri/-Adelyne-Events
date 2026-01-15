@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Instagram, Facebook, Phone, Mail, MapPin, ChevronRight, Star } from 'lucide-react';
+import { Menu, X, Instagram, Facebook, Phone, Mail, MapPin, ChevronRight, Star, MessageCircle, ArrowUpRight } from 'lucide-react';
 import { NAV_LINKS, SERVICES, GALLERY_IMAGES } from './constants';
 import { ServiceCard } from './components/ServiceCard';
 import { Gallery } from './components/Gallery';
@@ -18,7 +18,19 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white relative">
+      {/* Floating WhatsApp Button */}
+      <a 
+        href="https://wa.me/254700000000" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="fixed bottom-8 right-8 z-[100] bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all group flex items-center gap-2"
+        aria-label="Chat on WhatsApp"
+      >
+        <span className="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-500 font-bold px-0 group-hover:px-2">Chat with us</span>
+        <MessageCircle className="w-8 h-8 fill-current" />
+      </a>
+
       {/* Navigation */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-md py-3' : 'bg-transparent py-5'}`}>
         <div className="container mx-auto px-6 flex justify-between items-center">
@@ -38,6 +50,16 @@ const App: React.FC = () => {
                 {link.label}
               </a>
             ))}
+            
+            <div className="flex items-center gap-4 border-l pl-8 border-gray-200/20">
+              <a href="#" className={`hover:text-rose-400 transition-colors ${scrolled ? 'text-gray-700' : 'text-white'}`} aria-label="Instagram">
+                <Instagram className="w-5 h-5" />
+              </a>
+              <a href="https://wa.me/254700000000" className={`hover:text-green-500 transition-colors ${scrolled ? 'text-gray-700' : 'text-white'}`} aria-label="WhatsApp">
+                <MessageCircle className="w-5 h-5" />
+              </a>
+            </div>
+
             <button className="bg-rose-500 hover:bg-rose-600 text-white px-6 py-2 rounded-full text-sm font-semibold transition-all shadow-lg hover:shadow-xl active:scale-95">
               Book Now
             </button>
@@ -67,6 +89,14 @@ const App: React.FC = () => {
                   {link.label}
                 </a>
               ))}
+              <div className="flex gap-6 py-4">
+                <a href="#" className="flex items-center gap-2 text-rose-600 font-bold">
+                   <Instagram className="w-6 h-6" /> Instagram
+                </a>
+                <a href="https://wa.me/254700000000" className="flex items-center gap-2 text-green-600 font-bold">
+                   <MessageCircle className="w-6 h-6" /> WhatsApp
+                </a>
+              </div>
               <button className="bg-rose-500 text-white px-6 py-3 rounded-lg font-semibold mt-2">
                 Get a Quote
               </button>
@@ -101,9 +131,9 @@ const App: React.FC = () => {
             <button className="bg-rose-500 hover:bg-rose-600 text-white px-10 py-4 rounded-full text-lg font-bold shadow-2xl transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
               Start Planning <ChevronRight className="w-5 h-5" />
             </button>
-            <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/30 px-10 py-4 rounded-full text-lg font-bold transition-all shadow-xl">
-              View Portfolio
-            </button>
+            <a href="https://wa.me/254700000000" className="bg-[#25D366] hover:bg-[#1fb355] text-white px-10 py-4 rounded-full text-lg font-bold transition-all shadow-xl flex items-center gap-2">
+              WhatsApp Us <MessageCircle className="w-5 h-5" />
+            </a>
           </div>
         </div>
       </section>
@@ -157,43 +187,16 @@ const App: React.FC = () => {
               <h3 className="text-4xl font-bold text-gray-900 mb-4">A Glimpse of Magic</h3>
               <p className="text-gray-600">Explore the vibrant colors and elegant details of the many weddings, Ruracios, and parties we have curated.</p>
             </div>
-            <button className="text-rose-600 font-semibold flex items-center gap-2 group">
-              View All Photos <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
+            <a href="#" className="bg-rose-100 text-rose-600 px-6 py-2 rounded-full font-bold flex items-center gap-2 group hover:bg-rose-600 hover:text-white transition-all">
+              Follow on Instagram <Instagram className="w-4 h-4" />
+            </a>
           </div>
           <Gallery images={GALLERY_IMAGES} />
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-24 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative">
-                <div className="flex text-amber-400 mb-4">
-                  {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-current" />)}
-                </div>
-                <p className="text-gray-700 italic mb-6 leading-relaxed">
-                  "Adelyne Events made our wedding day look like a fairytale. Every flower, every table setting was perfect beyond our imagination. Highly recommended!"
-                </p>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-rose-200" />
-                  <div>
-                    <div className="font-bold text-gray-900">Sarah & James</div>
-                    <div className="text-xs text-gray-500">Wedding Clients</div>
-                  </div>
-                </div>
-                <div className="absolute top-8 right-8 text-gray-100 text-6xl font-serif">"</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Contact Section */}
       <section id="contact" className="py-24 gradient-bg relative overflow-hidden">
-        {/* Decorative elements */}
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-rose-200/40 rounded-full blur-3xl" />
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-orange-200/40 rounded-full blur-3xl" />
         
@@ -202,46 +205,41 @@ const App: React.FC = () => {
             <div className="md:w-1/2 bg-rose-600 p-12 text-white">
               <h3 className="text-3xl font-bold mb-8">Get in Touch</h3>
               <p className="text-rose-100 mb-12 text-lg">
-                Ready to plan your next big celebration? Fill out the form and our team will reach out within 24 hours.
+                Ready to plan your next big celebration? Fill out the form or chat with us directly.
               </p>
               
               <div className="space-y-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-                    <Phone className="w-5 h-5" />
+                <a href="https://wa.me/254700000000" className="flex items-center gap-4 group p-3 rounded-2xl hover:bg-white/10 transition-all">
+                  <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <MessageCircle className="w-6 h-6 fill-white" />
                   </div>
                   <div>
-                    <p className="text-xs uppercase opacity-70">Call Us</p>
-                    <p className="font-semibold">+254 700 000 000</p>
+                    <p className="text-xs uppercase opacity-70">WhatsApp Us</p>
+                    <p className="font-bold text-xl">+254 700 000 000</p>
                   </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-                    <Mail className="w-5 h-5" />
+                  <ArrowUpRight className="ml-auto w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </a>
+
+                <a href="#" className="flex items-center gap-4 group p-3 rounded-2xl hover:bg-white/10 transition-all">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                    <Instagram className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase opacity-70">Follow Instagram</p>
+                    <p className="font-bold text-xl">@AdelyneEvents</p>
+                  </div>
+                  <ArrowUpRight className="ml-auto w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </a>
+
+                <div className="flex items-center gap-4 p-3">
+                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
+                    <Mail className="w-6 h-6" />
                   </div>
                   <div>
                     <p className="text-xs uppercase opacity-70">Email Us</p>
-                    <p className="font-semibold">hello@adelyneevents.com</p>
+                    <p className="font-bold text-xl">hello@adelyneevents.com</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-                    <MapPin className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <p className="text-xs uppercase opacity-70">Visit Us</p>
-                    <p className="font-semibold">Nairobi, Kenya</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-12 flex gap-4">
-                <a href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
-                  <Instagram className="w-5 h-5" />
-                </a>
-                <a href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors">
-                  <Facebook className="w-5 h-5" />
-                </a>
               </div>
             </div>
 
@@ -272,10 +270,6 @@ const App: React.FC = () => {
                     <option>Other</option>
                   </select>
                 </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Message</label>
-                  <textarea rows={4} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition-all" placeholder="Tell us about your event..."></textarea>
-                </div>
                 <button className="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-rose-500/30 transition-all active:scale-95">
                   Send Inquiry
                 </button>
@@ -296,6 +290,17 @@ const App: React.FC = () => {
               <p className="text-gray-400 leading-relaxed mb-6">
                 Creating vibrant, colorful, and unforgettable experiences for life's most precious milestones.
               </p>
+              <div className="flex gap-4">
+                <a href="#" className="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-purple-500/20" aria-label="Instagram">
+                  <Instagram className="w-6 h-6" />
+                </a>
+                <a href="https://wa.me/254700000000" className="w-12 h-12 rounded-xl bg-[#25D366] flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-green-500/20" aria-label="WhatsApp">
+                  <MessageCircle className="w-6 h-6 fill-white" />
+                </a>
+                <a href="#" className="w-12 h-12 rounded-xl bg-[#1877F2] flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-blue-500/20" aria-label="Facebook">
+                  <Facebook className="w-6 h-6 fill-white" />
+                </a>
+              </div>
             </div>
             
             <div>
@@ -321,8 +326,8 @@ const App: React.FC = () => {
               <h4 className="font-bold mb-6 text-lg">Newsletter</h4>
               <p className="text-gray-400 mb-4 text-sm">Subscribe to get event inspiration and tips.</p>
               <div className="flex gap-2">
-                <input type="email" placeholder="Email" className="bg-gray-800 border-none rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-rose-500" />
-                <button className="bg-rose-600 p-2 rounded-lg"><ChevronRight className="w-5 h-5" /></button>
+                <input type="email" placeholder="Email" className="bg-gray-800 border-none rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-rose-500 outline-none" />
+                <button className="bg-rose-600 p-2 rounded-lg hover:bg-rose-500 transition-colors"><ChevronRight className="w-5 h-5" /></button>
               </div>
             </div>
           </div>
@@ -330,8 +335,8 @@ const App: React.FC = () => {
           <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
             <p>© {new Date().getFullYear()} Adelyne Events. All rights reserved.</p>
             <div className="flex gap-6">
-              <a href="#" className="hover:text-white">Privacy Policy</a>
-              <a href="#" className="hover:text-white">Terms of Service</a>
+              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
             </div>
           </div>
         </div>
