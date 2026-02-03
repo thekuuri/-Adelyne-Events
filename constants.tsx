@@ -27,8 +27,8 @@ export const SERVICES: Service[] = [
     color: 'bg-blue-100 text-blue-600',
   },
   {
-    id: 'ruracio',
-    title: 'Traditional Ruracio',
+    id: 'traditional-weddings',
+    title: 'Traditional weddings',
     description: 'Honoring heritage and culture with elegant traditional setups.',
     icon: 'Calendar',
     color: 'bg-orange-100 text-orange-600',
@@ -57,17 +57,20 @@ export const SERVICES: Service[] = [
 ];
 
 export const GALLERY_IMAGES: GalleryImage[] = [
+  { id: 9, url: '/wedding_reception.jpg', category: 'Wedding', title: 'Grand Reception' },
+  { id: 10, url: '/floral_centerpiece.jpg', category: 'Wedding', title: 'Elegant Florals' },
+  { id: 11, url: '/ruracio_njeri_ted.jpg', category: 'Traditional', title: 'Njeri & Ted Traditional Wedding' },
+  { id: 12, url: '/evening_reception.jpg', category: 'Wedding', title: 'Evening Ambiance' },
+  { id: 13, url: '/graduation_birthday.jpg', category: 'Birthday', title: 'Celebration Arch' },
   { id: 1, url: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80', category: 'Wedding', title: 'Luxury Bouquet' },
   { id: 2, url: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80', category: 'Baby Shower', title: 'Outdoor Baby Shower' },
-  { id: 3, url: 'https://images.unsplash.com/photo-1530103862676-fa8c9134cb81?auto=format&fit=crop&q=80', category: 'Corporate', title: 'Elegant Dining' },
   { id: 4, url: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80', category: 'Wedding', title: 'Floral Arches' },
   { id: 5, url: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&q=80', category: 'Evening', title: 'Gala Night' },
   { id: 6, url: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&q=80', category: 'Birthday', title: 'Vibrant Celebrations' },
   { id: 7, url: 'https://images.unsplash.com/photo-1502635385003-ee1e6a1a742d?auto=format&fit=crop&q=80', category: 'Traditional', title: 'Cultural Heritage' },
-  { id: 8, url: 'https://images.unsplash.com/photo-1513276396060-de196bc52762?auto=format&fit=crop&q=80', category: 'Baby Shower', title: 'Pink & White Decor' },
 ];
 
-// Note: In a real app, we'd use the provided local photos. 
+// Note: In a real app, we'd use the provided local photos.
 // For this demo, I'll use placeholders that resemble the user's high-quality photos.
 // Actually, I should use the user's provided imagery logic as much as possible.
 // Since I can't "see" filenames of the uploaded images in code, I will use descriptive placeholders.

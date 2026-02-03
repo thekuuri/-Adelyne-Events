@@ -20,9 +20,9 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-white relative">
       {/* Floating WhatsApp Button */}
-      <a 
-        href="https://wa.me/254700000000" 
-        target="_blank" 
+      <a
+        href="https://wa.me/254710739550?text=Hi%20Adelyne!"
+        target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-8 right-8 z-[100] bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all group flex items-center gap-2"
         aria-label="Chat on WhatsApp"
@@ -34,9 +34,12 @@ const App: React.FC = () => {
       {/* Navigation */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-md py-3' : 'bg-transparent py-5'}`}>
         <div className="container mx-auto px-6 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <span className={`text-3xl font-serif font-bold ${scrolled ? 'text-rose-600' : 'text-white drop-shadow-lg'}`}>Adelyne</span>
-            <span className={`text-xs uppercase tracking-widest ${scrolled ? 'text-gray-500' : 'text-white opacity-80'}`}>Events</span>
+          <div className="flex items-center">
+            <img
+              src="/logo.png"
+              alt="Adelyne Events"
+              className={`h-12 md:h-16 w-auto transition-all duration-300 ${scrolled ? '' : 'brightness-0 invert'}`}
+            />
           </div>
 
           {/* Desktop Links */}
@@ -50,12 +53,12 @@ const App: React.FC = () => {
                 {link.label}
               </a>
             ))}
-            
+
             <div className="flex items-center gap-4 border-l pl-8 border-gray-200/20">
               <a href="#" className={`hover:text-rose-400 transition-colors ${scrolled ? 'text-gray-700' : 'text-white'}`} aria-label="Instagram">
                 <Instagram className="w-5 h-5" />
               </a>
-              <a href="https://wa.me/254700000000" className={`hover:text-green-500 transition-colors ${scrolled ? 'text-gray-700' : 'text-white'}`} aria-label="WhatsApp">
+              <a href="https://wa.me/254710739550?text=Hi%20Adelyne!" className={`hover:text-green-500 transition-colors ${scrolled ? 'text-gray-700' : 'text-white'}`} aria-label="WhatsApp">
                 <MessageCircle className="w-5 h-5" />
               </a>
             </div>
@@ -91,10 +94,10 @@ const App: React.FC = () => {
               ))}
               <div className="flex gap-6 py-4">
                 <a href="#" className="flex items-center gap-2 text-rose-600 font-bold">
-                   <Instagram className="w-6 h-6" /> Instagram
+                  <Instagram className="w-6 h-6" /> Instagram
                 </a>
-                <a href="https://wa.me/254700000000" className="flex items-center gap-2 text-green-600 font-bold">
-                   <MessageCircle className="w-6 h-6" /> WhatsApp
+                <a href="https://wa.me/254710739550?text=Hi%20Adelyne!" className="flex items-center gap-2 text-green-600 font-bold">
+                  <MessageCircle className="w-6 h-6" /> WhatsApp
                 </a>
               </div>
               <button className="bg-rose-500 text-white px-6 py-3 rounded-lg font-semibold mt-2">
@@ -115,23 +118,22 @@ const App: React.FC = () => {
             className="w-full h-full object-cover scale-110 animate-pulse-slow"
           />
         </div>
-        
+
         <div className="container mx-auto px-6 relative z-20 text-center text-white">
           <span className="inline-block px-4 py-1 rounded-full bg-rose-500/20 backdrop-blur-sm border border-rose-400/30 text-rose-100 text-sm font-semibold mb-6 animate-bounce">
             Premium Event Planning
           </span>
           <h1 className="text-5xl md:text-8xl font-bold mb-6 leading-tight">
-            Crafting Your <br /> 
-            <span className="text-rose-400 font-cursive italic">Dream Moments</span>
+            <span className="text-rose-400 font-cursive italic">...mapping</span> memories
           </h1>
           <p className="text-lg md:text-xl text-gray-100 mb-10 max-w-2xl mx-auto leading-relaxed drop-shadow-sm">
-            From fairytale weddings and cultural Ruracios to joyful baby showers. We bring vibrancy, color, and elegance to every celebration.
+            From fairytale weddings and cultural traditional weddings to joyful baby showers. We bring vibrancy, color, and elegance to every celebration.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button className="bg-rose-500 hover:bg-rose-600 text-white px-10 py-4 rounded-full text-lg font-bold shadow-2xl transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
               Start Planning <ChevronRight className="w-5 h-5" />
             </button>
-            <a href="https://wa.me/254700000000" className="bg-[#25D366] hover:bg-[#1fb355] text-white px-10 py-4 rounded-full text-lg font-bold transition-all shadow-xl flex items-center gap-2">
+            <a href="https://wa.me/254710739550?text=Hi%20Adelyne!" className="bg-[#25D366] hover:bg-[#1fb355] text-white px-10 py-4 rounded-full text-lg font-bold transition-all shadow-xl flex items-center gap-2">
               WhatsApp Us <MessageCircle className="w-5 h-5" />
             </a>
           </div>
@@ -185,7 +187,7 @@ const App: React.FC = () => {
             <div className="max-w-xl">
               <h2 className="text-rose-600 font-cursive text-3xl mb-4">Our Portfolio</h2>
               <h3 className="text-4xl font-bold text-gray-900 mb-4">A Glimpse of Magic</h3>
-              <p className="text-gray-600">Explore the vibrant colors and elegant details of the many weddings, Ruracios, and parties we have curated.</p>
+              <p className="text-gray-600">Explore the vibrant colors and elegant details of the many weddings, traditional weddings, and parties we have curated.</p>
             </div>
             <a href="#" className="bg-rose-100 text-rose-600 px-6 py-2 rounded-full font-bold flex items-center gap-2 group hover:bg-rose-600 hover:text-white transition-all">
               Follow on Instagram <Instagram className="w-4 h-4" />
@@ -199,7 +201,7 @@ const App: React.FC = () => {
       <section id="contact" className="py-24 gradient-bg relative overflow-hidden">
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-rose-200/40 rounded-full blur-3xl" />
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-orange-200/40 rounded-full blur-3xl" />
-        
+
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
             <div className="md:w-1/2 bg-rose-600 p-12 text-white">
@@ -207,15 +209,15 @@ const App: React.FC = () => {
               <p className="text-rose-100 mb-12 text-lg">
                 Ready to plan your next big celebration? Fill out the form or chat with us directly.
               </p>
-              
+
               <div className="space-y-6">
-                <a href="https://wa.me/254700000000" className="flex items-center gap-4 group p-3 rounded-2xl hover:bg-white/10 transition-all">
+                <a href="https://wa.me/254710739550?text=Hi%20Adelyne!" className="flex items-center gap-4 group p-3 rounded-2xl hover:bg-white/10 transition-all">
                   <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
                     <MessageCircle className="w-6 h-6 fill-white" />
                   </div>
                   <div>
                     <p className="text-xs uppercase opacity-70">WhatsApp Us</p>
-                    <p className="font-bold text-xl">+254 700 000 000</p>
+                    <p className="font-bold text-xl">+254 710 739 550</p>
                   </div>
                   <ArrowUpRight className="ml-auto w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </a>
@@ -244,34 +246,47 @@ const App: React.FC = () => {
             </div>
 
             <div className="md:w-1/2 p-12 bg-white">
-              <form className="space-y-6">
+              <form
+                className="space-y-6"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const target = e.target as any;
+                  const firstName = target[0].value;
+                  const lastName = target[1].value;
+                  const email = target[2].value;
+                  const eventType = target[3].value;
+
+                  const message = `Hi Adelyne! I would like to make an inquiry.%0A%0A*Name:* ${firstName} ${lastName}%0A*Email:* ${email}%0A*Event Type:* ${eventType}`;
+                  window.open(`https://wa.me/254710739550?text=${message}`, '_blank');
+                }}
+              >
                 <div className="grid grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">First Name</label>
-                    <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition-all" placeholder="Jane" />
+                    <input required type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition-all" placeholder="Jane" />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Last Name</label>
-                    <input type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition-all" placeholder="Doe" />
+                    <input required type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition-all" placeholder="Doe" />
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
-                  <input type="email" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition-all" placeholder="jane@example.com" />
+                  <input required type="email" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition-all" placeholder="jane@example.com" />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Event Type</label>
-                  <select className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition-all appearance-none bg-white">
+                  <select required className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition-all appearance-none bg-white">
                     <option>Wedding</option>
                     <option>Baby Shower</option>
-                    <option>Ruracio</option>
+                    <option>Traditional Wedding</option>
                     <option>Graduation</option>
                     <option>Birthday Party</option>
                     <option>Other</option>
                   </select>
                 </div>
-                <button className="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-rose-500/30 transition-all active:scale-95">
-                  Send Inquiry
+                <button type="submit" className="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-rose-500/30 transition-all active:scale-95">
+                  Send Inquiry via WhatsApp
                 </button>
               </form>
             </div>
@@ -284,8 +299,8 @@ const App: React.FC = () => {
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
             <div className="col-span-1 md:col-span-1">
-              <div className="flex items-center gap-2 mb-6">
-                <span className="text-2xl font-serif font-bold text-rose-500">Adelyne</span>
+              <div className="flex items-center mb-6">
+                <img src="/logo.png" alt="Adelyne Events" className="h-16 w-auto brightness-0 invert" />
               </div>
               <p className="text-gray-400 leading-relaxed mb-6">
                 Creating vibrant, colorful, and unforgettable experiences for life's most precious milestones.
@@ -294,7 +309,7 @@ const App: React.FC = () => {
                 <a href="#" className="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-purple-500/20" aria-label="Instagram">
                   <Instagram className="w-6 h-6" />
                 </a>
-                <a href="https://wa.me/254700000000" className="w-12 h-12 rounded-xl bg-[#25D366] flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-green-500/20" aria-label="WhatsApp">
+                <a href="https://wa.me/254710739550?text=Hi%20Adelyne!" className="w-12 h-12 rounded-xl bg-[#25D366] flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-green-500/20" aria-label="WhatsApp">
                   <MessageCircle className="w-6 h-6 fill-white" />
                 </a>
                 <a href="#" className="w-12 h-12 rounded-xl bg-[#1877F2] flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-blue-500/20" aria-label="Facebook">
@@ -302,7 +317,7 @@ const App: React.FC = () => {
                 </a>
               </div>
             </div>
-            
+
             <div>
               <h4 className="font-bold mb-6 text-lg">Quick Links</h4>
               <ul className="space-y-4">
@@ -311,17 +326,17 @@ const App: React.FC = () => {
                 ))}
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-bold mb-6 text-lg">Our Events</h4>
               <ul className="space-y-4">
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Weddings</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Traditional Ruracios</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Traditional weddings</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Baby Showers</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Graduations</a></li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-bold mb-6 text-lg">Newsletter</h4>
               <p className="text-gray-400 mb-4 text-sm">Subscribe to get event inspiration and tips.</p>
@@ -331,7 +346,7 @@ const App: React.FC = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
             <p>© {new Date().getFullYear()} Adelyne Events. All rights reserved.</p>
             <div className="flex gap-6">
