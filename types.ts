@@ -18,3 +18,19 @@ export interface NavLink {
   label: string;
   href: string;
 }
+
+export interface Testimonial {
+  id: number;
+  name: string;
+  event: string;
+  quote: string;
+  rating: number;
+  avatar: string;
+}
+
+export interface FAQItem {
+  id: number;
+  question: string;
+  answer: string;
+}
+

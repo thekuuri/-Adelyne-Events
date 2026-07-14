@@ -1,13 +1,43 @@
-
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Instagram, Facebook, Phone, Mail, MapPin, ChevronRight, Star, MessageCircle, ArrowUpRight } from 'lucide-react';
-import { NAV_LINKS, SERVICES, GALLERY_IMAGES } from './constants';
+import { Menu, X, Instagram, Facebook, Mail, ChevronRight, MessageCircle, ArrowUpRight } from 'lucide-react';
+import { NAV_LINKS, SERVICES, GALLERY_IMAGES, TESTIMONIALS, FAQS } from './constants';
 import { ServiceCard } from './components/ServiceCard';
 import { Gallery } from './components/Gallery';
+import { About } from './components/About';
+import { BudgetEstimator } from './components/BudgetEstimator';
+import { Testimonials } from './components/Testimonials';
+import { FAQ } from './components/FAQ';
+import { InquiryWizard } from './components/InquiryWizard';
+import { AdminLogin } from './components/AdminLogin';
+import { AdminDashboard } from './components/AdminDashboard';
+import { GalleryImage } from './types';
 
 const App: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
+
+  // Synchronize gallery images with localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem('adelyne_gallery_images');
+    if (stored) {
+      try {
+        setGalleryImages(JSON.parse(stored));
+      } catch (e) {
+        setGalleryImages(GALLERY_IMAGES);
+      }
+    } else {
+      localStorage.setItem('adelyne_gallery_images', JSON.stringify(GALLERY_IMAGES));
+      setGalleryImages(GALLERY_IMAGES);
+    }
+  }, []);
+
+  const handleUpdateGallery = (newImages: GalleryImage[]) => {
+    setGalleryImages(newImages);
+    localStorage.setItem('adelyne_gallery_images', JSON.stringify(newImages));
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,6 +46,17 @@ const App: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Early return if Admin is logged in to view dashboard exclusively
+  if (isAdminLoggedIn) {
+    return (
+      <AdminDashboard
+        galleryImages={galleryImages}
+        onUpdateGallery={handleUpdateGallery}
+        onLogout={() => setIsAdminLoggedIn(false)}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white relative">
@@ -63,9 +104,9 @@ const App: React.FC = () => {
               </a>
             </div>
 
-            <button className="bg-rose-500 hover:bg-rose-600 text-white px-6 py-2 rounded-full text-sm font-semibold transition-all shadow-lg hover:shadow-xl active:scale-95">
+            <a href="#contact" className="bg-rose-500 hover:bg-rose-600 text-white px-6 py-2 rounded-full text-sm font-semibold transition-all shadow-lg hover:shadow-xl active:scale-95">
               Book Now
-            </button>
+            </a>
           </div>
 
           {/* Mobile Toggle */}
@@ -100,9 +141,9 @@ const App: React.FC = () => {
                   <MessageCircle className="w-6 h-6" /> WhatsApp
                 </a>
               </div>
-              <button className="bg-rose-500 text-white px-6 py-3 rounded-lg font-semibold mt-2">
+              <a href="#contact" onClick={() => setIsMenuOpen(false)} className="bg-rose-500 text-white text-center px-6 py-3 rounded-lg font-semibold mt-2">
                 Get a Quote
-              </button>
+              </a>
             </div>
           </div>
         )}
@@ -115,7 +156,7 @@ const App: React.FC = () => {
           <img
             src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=2000"
             alt="Hero Background"
-            className="w-full h-full object-cover scale-110 animate-pulse-slow"
+            className="w-full h-full object-cover scale-110"
           />
         </div>
 
@@ -130,9 +171,9 @@ const App: React.FC = () => {
             From fairytale weddings and cultural traditional weddings to joyful baby showers. We bring vibrancy, color, and elegance to every celebration.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button className="bg-rose-500 hover:bg-rose-600 text-white px-10 py-4 rounded-full text-lg font-bold shadow-2xl transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
+            <a href="#contact" className="bg-rose-500 hover:bg-rose-600 text-white px-10 py-4 rounded-full text-lg font-bold shadow-2xl transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
               Start Planning <ChevronRight className="w-5 h-5" />
-            </button>
+            </a>
             <a href="https://wa.me/254710739550?text=Hi%20Adelyne!" className="bg-[#25D366] hover:bg-[#1fb355] text-white px-10 py-4 rounded-full text-lg font-bold transition-all shadow-xl flex items-center gap-2">
               WhatsApp Us <MessageCircle className="w-5 h-5" />
             </a>
@@ -164,6 +205,9 @@ const App: React.FC = () => {
         </div>
       </section>
 
+      {/* About Section */}
+      <About />
+
       {/* Services Section */}
       <section id="services" className="py-24 gradient-bg">
         <div className="container mx-auto px-6">
@@ -180,6 +224,9 @@ const App: React.FC = () => {
         </div>
       </section>
 
+      {/* Estimator Section */}
+      <BudgetEstimator />
+
       {/* Gallery Section */}
       <section id="gallery" className="py-24 bg-white">
         <div className="container mx-auto px-6">
@@ -193,9 +240,15 @@ const App: React.FC = () => {
               Follow on Instagram <Instagram className="w-4 h-4" />
             </a>
           </div>
-          <Gallery images={GALLERY_IMAGES} />
+          <Gallery images={galleryImages} />
         </div>
       </section>
+
+      {/* Testimonials Section */}
+      <Testimonials testimonials={TESTIMONIALS} />
+
+      {/* FAQ Section */}
+      <FAQ faqs={FAQS} />
 
       {/* Contact Section */}
       <section id="contact" className="py-24 gradient-bg relative overflow-hidden">
@@ -204,91 +257,53 @@ const App: React.FC = () => {
 
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
-            <div className="md:w-1/2 bg-rose-600 p-12 text-white">
-              <h3 className="text-3xl font-bold mb-8">Get in Touch</h3>
-              <p className="text-rose-100 mb-12 text-lg">
-                Ready to plan your next big celebration? Fill out the form or chat with us directly.
-              </p>
+            {/* Left Contact Details Panel */}
+            <div className="md:w-1/2 bg-rose-600 p-12 text-white flex flex-col justify-between">
+              <div>
+                <h3 className="text-3xl font-bold mb-8 font-serif">Get in Touch</h3>
+                <p className="text-rose-100 mb-12 text-lg">
+                  Ready to plan your next big celebration? Fill out the step-by-step form or chat with us directly.
+                </p>
 
-              <div className="space-y-6">
-                <a href="https://wa.me/254710739550?text=Hi%20Adelyne!" className="flex items-center gap-4 group p-3 rounded-2xl hover:bg-white/10 transition-all">
-                  <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                    <MessageCircle className="w-6 h-6 fill-white" />
-                  </div>
-                  <div>
-                    <p className="text-xs uppercase opacity-70">WhatsApp Us</p>
-                    <p className="font-bold text-xl">+254 710 739 550</p>
-                  </div>
-                  <ArrowUpRight className="ml-auto w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </a>
+                <div className="space-y-6">
+                  <a href="https://wa.me/254710739550?text=Hi%20Adelyne!" className="flex items-center gap-4 group p-3 rounded-2xl hover:bg-white/10 transition-all">
+                    <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <MessageCircle className="w-6 h-6 fill-white" />
+                    </div>
+                    <div>
+                      <p className="text-xs uppercase opacity-70 font-semibold">WhatsApp Us</p>
+                      <p className="font-bold text-xl">+254 710 739 550</p>
+                    </div>
+                    <ArrowUpRight className="ml-auto w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </a>
 
-                <a href="#" className="flex items-center gap-4 group p-3 rounded-2xl hover:bg-white/10 transition-all">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                    <Instagram className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <p className="text-xs uppercase opacity-70">Follow Instagram</p>
-                    <p className="font-bold text-xl">@AdelyneEvents</p>
-                  </div>
-                  <ArrowUpRight className="ml-auto w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </a>
+                  <a href="#" className="flex items-center gap-4 group p-3 rounded-2xl hover:bg-white/10 transition-all">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <Instagram className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <p className="text-xs uppercase opacity-70 font-semibold">Follow Instagram</p>
+                      <p className="font-bold text-xl">@AdelyneEvents</p>
+                    </div>
+                    <ArrowUpRight className="ml-auto w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </a>
 
-                <div className="flex items-center gap-4 p-3">
-                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
-                    <Mail className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <p className="text-xs uppercase opacity-70">Email Us</p>
-                    <p className="font-bold text-xl">hello@adelyneevents.com</p>
+                  <div className="flex items-center gap-4 p-3">
+                    <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center">
+                      <Mail className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <p className="text-xs uppercase opacity-70 font-semibold">Email Us</p>
+                      <p className="font-bold text-xl">hello@adelyneevents.com</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="md:w-1/2 p-12 bg-white">
-              <form
-                className="space-y-6"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const target = e.target as any;
-                  const firstName = target[0].value;
-                  const lastName = target[1].value;
-                  const email = target[2].value;
-                  const eventType = target[3].value;
-
-                  const message = `Hi Adelyne! I would like to make an inquiry.%0A%0A*Name:* ${firstName} ${lastName}%0A*Email:* ${email}%0A*Event Type:* ${eventType}`;
-                  window.open(`https://wa.me/254710739550?text=${message}`, '_blank');
-                }}
-              >
-                <div className="grid grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">First Name</label>
-                    <input required type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition-all" placeholder="Jane" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Last Name</label>
-                    <input required type="text" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition-all" placeholder="Doe" />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
-                  <input required type="email" className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition-all" placeholder="jane@example.com" />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Event Type</label>
-                  <select required className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none transition-all appearance-none bg-white">
-                    <option>Wedding</option>
-                    <option>Baby Shower</option>
-                    <option>Traditional Wedding</option>
-                    <option>Graduation</option>
-                    <option>Birthday Party</option>
-                    <option>Other</option>
-                  </select>
-                </div>
-                <button type="submit" className="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-rose-500/30 transition-all active:scale-95">
-                  Send Inquiry via WhatsApp
-                </button>
-              </form>
+            {/* Right Multi-Step Contact Wizard Panel */}
+            <div className="md:w-1/2 p-4 md:p-8 bg-gray-50/30 flex flex-col justify-center border-t md:border-t-0 md:border-l border-gray-100">
+              <InquiryWizard />
             </div>
           </div>
         </div>
@@ -324,6 +339,14 @@ const App: React.FC = () => {
                 {NAV_LINKS.map(link => (
                   <li key={link.label}><a href={link.href} className="text-gray-400 hover:text-white transition-colors">{link.label}</a></li>
                 ))}
+                <li>
+                  <button
+                    onClick={() => setShowLoginModal(true)}
+                    className="text-rose-400 hover:text-rose-300 font-semibold text-sm transition-colors text-left"
+                  >
+                    🔐 Admin Portal
+                  </button>
+                </li>
               </ul>
             </div>
 
@@ -356,6 +379,13 @@ const App: React.FC = () => {
           </div>
         </div>
       </footer>
+
+      {/* Admin Login Modal Overlay */}
+      <AdminLogin
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        onSuccess={() => setIsAdminLoggedIn(true)}
+      />
     </div>
   );
 };
