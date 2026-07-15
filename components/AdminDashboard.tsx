@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { FileText, Image as ImageIcon, Plus, Trash2, Download, LogOut, ArrowLeft, PlusCircle, Check, Edit2 } from 'lucide-react';
+import { FileText, Image as ImageIcon, Plus, Trash2, Download, LogOut, ArrowLeft, PlusCircle, Check, Edit2, Upload, Link as LinkIcon, X } from 'lucide-react';
 import { GalleryImage } from '../types';
 
 interface AdminDashboardProps {
@@ -29,6 +29,28 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [editingImageId, setEditingImageId] = useState<number | null>(null);
   const [editTitle, setEditTitle] = useState('');
   const [editCategory, setEditCategory] = useState('');
+  const [imgUploadMode, setImgUploadMode] = useState<'file' | 'url'>('file');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image is too large! Please choose an image smaller than 5MB to optimize database speeds.");
+      return;
+    }
+
+    setSelectedFile(file);
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (typeof reader.result === 'string') {
+        setNewImgUrl(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
 
   // --- Quote State ---
   const [clientName, setClientName] = useState('Sarah & John');
@@ -68,26 +90,60 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     return subtotal + vatAmount;
   }, [subtotal, vatAmount]);
 
-  // --- Gallery Actions ---
-  const handleAddImage = (e: React.FormEvent) => {
+  // --- Gallery Actions (API Integrated) ---
+  const handleAddImage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newImgUrl.trim() || !newImgTitle.trim()) return;
+    if (imgUploadMode === 'file' && !selectedFile) return;
+    if (imgUploadMode === 'url' && !newImgUrl.trim()) return;
+    if (!newImgTitle.trim()) return;
 
-    const newItem: GalleryImage = {
-      id: Date.now(),
-      url: newImgUrl.trim(),
-      category: newImgCategory,
-      title: newImgTitle.trim(),
-    };
+    const formData = new FormData();
+    formData.append('title', newImgTitle.trim());
+    formData.append('category', newImgCategory);
 
-    onUpdateGallery([newItem, ...galleryImages]);
-    setNewImgUrl('');
-    setNewImgTitle('');
+    if (imgUploadMode === 'file' && selectedFile) {
+      formData.append('image', selectedFile);
+    } else {
+      formData.append('url', newImgUrl.trim());
+    }
+
+    try {
+      const res = await fetch('http://localhost:8000/api/gallery', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (res.ok) {
+        const newItem = await res.json();
+        onUpdateGallery([newItem, ...galleryImages]);
+        setNewImgUrl('');
+        setNewImgTitle('');
+        setSelectedFile(null);
+      } else {
+        const errData = await res.json();
+        alert(errData.error || 'Failed to upload photo to Laravel server.');
+      }
+    } catch (error) {
+      console.error("Upload error", error);
+      alert("Could not connect to the backend server. Make sure 'php artisan serve' is running.");
+    }
   };
 
-  const handleDeleteImage = (id: number) => {
+  const handleDeleteImage = async (id: number) => {
     if (confirm('Are you sure you want to delete this image from the gallery?')) {
-      onUpdateGallery(galleryImages.filter((img) => img.id !== id));
+      try {
+        const res = await fetch(`http://localhost:8000/api/gallery/${id}`, {
+          method: 'DELETE',
+        });
+        if (res.ok) {
+          onUpdateGallery(galleryImages.filter((img) => img.id !== id));
+        } else {
+          alert('Failed to delete image from the backend.');
+        }
+      } catch (error) {
+        console.error("Delete error", error);
+        alert("Could not connect to the backend server to delete the image.");
+      }
     }
   };
 
@@ -415,7 +471,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   <div className="flex justify-between items-start border-b-2 border-rose-500 pb-6 mb-8">
                     <div>
                       {/* Logo and company title */}
-                      <div className="flex items-center gap-2 mb-2">
+                      <div className="flex items-center gap-3 mb-2">
+                        <img src="/logo.png" alt="Adelyne Events Logo" className="h-10 w-auto" />
                         <span className="text-rose-500 font-serif font-extrabold text-2xl tracking-wide">ADELYNE EVENTS</span>
                       </div>
                       <p className="text-xs text-gray-400 font-semibold tracking-widest uppercase">...mapping memories</p>
@@ -519,50 +576,117 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 Upload New Gallery Photo
               </h3>
 
-              <form onSubmit={handleAddImage} className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
-                <div className="md:col-span-1">
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Photo Category</label>
-                  <select
-                    value={newImgCategory}
-                    onChange={(e) => setNewImgCategory(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-sm font-medium bg-white"
-                  >
-                    <option value="Wedding">Wedding</option>
-                    <option value="Traditional">Traditional</option>
-                    <option value="Baby Shower">Baby Shower</option>
-                    <option value="Birthday">Birthday</option>
-                    <option value="Evening">Evening</option>
-                  </select>
+              {/* Mode Selector Tabs */}
+              <div className="flex gap-2 mb-6 bg-gray-50 p-1 rounded-xl w-fit border border-gray-100">
+                <button
+                  type="button"
+                  onClick={() => { setImgUploadMode('file'); setNewImgUrl(''); }}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                    imgUploadMode === 'file'
+                      ? 'bg-rose-500 text-white shadow-sm'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <Upload className="w-3.5 h-3.5" /> Upload File
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setImgUploadMode('url'); setNewImgUrl(''); }}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                    imgUploadMode === 'url'
+                      ? 'bg-rose-500 text-white shadow-sm'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  <LinkIcon className="w-3.5 h-3.5" /> Web Image Link
+                </button>
+              </div>
+
+              <form onSubmit={handleAddImage} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Photo Category</label>
+                    <select
+                      value={newImgCategory}
+                      onChange={(e) => setNewImgCategory(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-sm font-medium bg-white"
+                    >
+                      <option value="Wedding">Wedding</option>
+                      <option value="Traditional">Traditional Wedding</option>
+                      <option value="Baby Shower">Baby Shower</option>
+                      <option value="Birthday">Birthday</option>
+                      <option value="Evening">Evening / Corporate</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Photo Caption/Title</label>
+                    <input
+                      required
+                      type="text"
+                      value={newImgTitle}
+                      onChange={(e) => setNewImgTitle(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-sm font-medium"
+                      placeholder="e.g. Garden Floral Arch"
+                    />
+                  </div>
                 </div>
 
-                <div className="md:col-span-1">
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Photo Caption/Title</label>
-                  <input
-                    required
-                    type="text"
-                    value={newImgTitle}
-                    onChange={(e) => setNewImgTitle(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-sm font-medium"
-                    placeholder="e.g. Garden Floral Arch"
-                  />
-                </div>
+                {imgUploadMode === 'file' ? (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="md:col-span-2 border-2 border-dashed border-gray-200 hover:border-rose-400 rounded-2xl p-6 text-center cursor-pointer transition-colors relative flex flex-col justify-center items-center">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      />
+                      <Upload className="mx-auto h-8 w-8 text-gray-400 mb-2" />
+                      <p className="text-sm font-semibold text-gray-600">Drag & drop or click to choose a photo</p>
+                      <p className="text-xs text-gray-400 mt-1">PNG, JPG, WEBP up to 2MB</p>
+                    </div>
 
-                <div className="md:col-span-1">
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Image Source URL</label>
-                  <input
-                    required
-                    type="text"
-                    value={newImgUrl}
-                    onChange={(e) => setNewImgUrl(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-sm font-medium"
-                    placeholder="Unsplash URL or file path"
-                  />
-                </div>
+                    <div className="md:col-span-1 border border-gray-100 rounded-2xl overflow-hidden aspect-video bg-gray-50 flex items-center justify-center relative">
+                      {newImgUrl ? (
+                        <>
+                          <img src={newImgUrl} alt="Upload preview" className="max-h-full max-w-full object-cover" />
+                          <button
+                            type="button"
+                            onClick={() => setNewImgUrl('')}
+                            className="absolute top-2 right-2 bg-black/60 hover:bg-rose-600 text-white p-1.5 rounded-full transition-colors"
+                            title="Clear photo"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </>
+                      ) : (
+                        <span className="text-xs text-gray-400 italic">No file selected</span>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Image Source URL</label>
+                    <input
+                      required
+                      type="text"
+                      value={newImgUrl}
+                      onChange={(e) => setNewImgUrl(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-sm font-medium"
+                      placeholder="e.g., https://images.unsplash.com/..."
+                    />
+                  </div>
+                )}
 
-                <div className="md:col-span-3 pt-2">
+                <div className="pt-2">
                   <button
                     type="submit"
-                    className="bg-rose-500 hover:bg-rose-600 text-white font-bold py-3.5 px-8 rounded-2xl shadow-md hover:shadow-rose-500/20 active:scale-97 transition-all flex items-center justify-center gap-2 cursor-pointer w-full text-sm"
+                    disabled={!newImgUrl}
+                    className={`font-bold py-3.5 px-8 rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 w-full text-sm ${
+                      newImgUrl
+                        ? 'bg-rose-500 hover:bg-rose-600 text-white hover:shadow-rose-500/20 active:scale-97 cursor-pointer'
+                        : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    }`}
                   >
                     <Plus className="w-5 h-5" /> Append Photo to Gallery
                   </button>

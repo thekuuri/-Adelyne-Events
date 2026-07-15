@@ -19,24 +19,26 @@ const App: React.FC = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
 
-  // Synchronize gallery images with localStorage
-  useEffect(() => {
-    const stored = localStorage.getItem('adelyne_gallery_images');
-    if (stored) {
-      try {
-        setGalleryImages(JSON.parse(stored));
-      } catch (e) {
-        setGalleryImages(GALLERY_IMAGES);
+  const API_BASE_URL = 'http://localhost:8000/api';
+
+  const fetchGallery = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/gallery`);
+      if (res.ok) {
+        const data = await res.json();
+        setGalleryImages(data);
       }
-    } else {
-      localStorage.setItem('adelyne_gallery_images', JSON.stringify(GALLERY_IMAGES));
-      setGalleryImages(GALLERY_IMAGES);
+    } catch (e) {
+      console.error("Failed fetching gallery from Laravel backend:", e);
     }
+  };
+
+  useEffect(() => {
+    fetchGallery();
   }, []);
 
   const handleUpdateGallery = (newImages: GalleryImage[]) => {
     setGalleryImages(newImages);
-    localStorage.setItem('adelyne_gallery_images', JSON.stringify(newImages));
   };
 
   useEffect(() => {
